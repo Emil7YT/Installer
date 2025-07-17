@@ -1,98 +1,106 @@
 #!/bin/bash
 
-# Store installed packages
-declare -A installed_packages
-installed_packages=()
+if ! command -v apt &> /dev/null; then
+    echo "❌ This script only works on APT-based systems like Ubuntu or Debian."
+    exit 1
+fi
 
-install_menu() {
-    echo -e "Welcome to the installer. Here you can install packages, games, Linux distros, etc."
-    echo "!NOTICE! Only packages work (in development)"
-    echo "What do you want to install?"
-    echo "1) Packages"
-    echo "2) Games"
-    echo "3) Linux distro"
-    echo "4) Other"
-    read -p "> " installation
+if [ "$EUID" -ne 0 ]; then 
+    echo "⚠️  Please run this script as root (use: sudo ./tozter-os.sh)"
+    exit 1
+fi
 
-    if [ "$installation" == "1" ]; then
-        clear
-        echo "Available packages:"
-        echo "1) system"
-        echo "2) info"
-        echo "3) htop"
-        echo "4) neofetch"
-        echo "5) figlet"
-        echo "6) lolcat"
-        echo "7) cowsay"
-        echo "8) nano"
-        echo "9) git"
-        echo "10) wget"
-        echo "Type the number of the package:"
-        read -p "> " pkg
+myint1=0
+myint2=0
 
-        case "$pkg" in
-            1) echo "Installing system..."; sleep 1; installed_packages[system]=1 ;;
-            2) echo "Installing info..."; sleep 1; installed_packages[info]=1 ;;
-            3) echo "Installing htop..."; sleep 1; installed_packages[htop]=1 ;;
-            4) echo "Installing neofetch..."; sleep 1; installed_packages[neofetch]=1 ;;
-            5) echo "Installing figlet..."; sleep 1; installed_packages[figlet]=1 ;;
-            6) echo "Installing lolcat..."; sleep 1; installed_packages[lolcat]=1 ;;
-            7) echo "Installing cowsay..."; sleep 1; installed_packages[cowsay]=1 ;;
-            8) echo "Installing nano..."; sleep 1; installed_packages[nano]=1 ;;
-            9) echo "Installing git..."; sleep 1; installed_packages[git]=1 ;;
-            10) echo "Installing wget..."; sleep 1; installed_packages[wget]=1 ;;
-            *) echo "Invalid option" ;;
-        esac
-        echo "Install finished!"
-    elif [ "$installation" == "2" ]; then
-        echo "Games in development..."
-    elif [ "$installation" == "3" ]; then
-        echo "Linux distros coming soon..."
-    elif [ "$installation" == "4" ]; then
-        echo "Contact the owner for custom installs."
+clear
+echo -e "\e[1;35m████████╗ ██████╗ ████████╗████████╗███████╗██████╗  ██████╗ ███████╗\e[0m"
+echo -e "\e[1;35m╚══██╔══╝██╔═══██╗╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗██╔═══██╗██╔════╝\e[0m"
+echo -e "\e[1;35m   ██║   ██║   ██║   ██║      ██║   █████╗  ██████╔╝██║   ██║███████╗\e[0m"
+echo -e "\e[1;35m   ██║   ██║   ██║   ██║      ██║   ██╔══╝  ██╔══██╗██║   ██║╚════██║\e[0m"
+echo -e "\e[1;35m   ██║   ╚██████╔╝   ██║      ██║   ███████╗██║  ██║╚██████╔╝███████║\e[0m"
+echo -e "\e[1;35m   ╚═╝    ╚═════╝    ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝\e[0m"
+echo -e "                \e[1;37mWelcome to Tozter OS Installer v0.1 (Ubuntu Shell Edition)\e[0m"
+echo -e "\n\e[33mNote: Only 'Packages' currently works. Other features in development.\e[0m\n"
+
+sleep 1
+
+# Main menu
+echo "What do you want to install?"
+echo "1) Packages"
+echo "2) Games"
+echo "3) Linux Distro"
+echo "4) Other"
+read -p "> " installation
+
+# Package option
+if [ "$installation" == "1" ]; then
+    clear
+    echo "Available packages to install:"
+    echo "1) System Tools (htop, neofetch, curl)"
+    echo "2) Info Package (just a message for now)"
+    read -p "Choose one > " pkg
+
+    if [ "$pkg" == "1" ]; then
+        echo "Installing System Tools..."
+        sleep 1
+        apt update && apt install -y htop neofetch curl
+        myint1=1
+        echo "✅ System tools installed."
+    elif [ "$pkg" == "2" ]; then
+        echo "Installing Info Package..."
+        sleep 1
+        myint2=1
+        echo "✅ Info package installed."
     else
-        echo "Invalid choice."
+        echo "❌ Invalid package choice."
     fi
-}
 
+elif [ "$installation" == "2" ]; then
+    clear
+    echo "🎮 Games module is coming soon. Restart Tozter OS."
+
+elif [ "$installation" == "3" ]; then
+    clear
+    echo "🐧 Linux distro downloader is in development."
+
+elif [ "$installation" == "4" ]; then
+    clear
+    echo "📩 Contact Tozter_1 for custom scripts."
+
+else
+    echo "❌ Invalid selection. Restart Tozter OS."
+    exit 1
+fi
+
+# Start pseudo-shell
 main() {
+    echo -e "\n\e[1;32mTozterOS Shell — type a command (system, info, exit):\e[0m"
     while true; do
-        read -p "> " input
+        read -p "TozterOS> " input
 
-        case "$input" in
-            "install")
-                install_menu
-                ;;
-            "system")
-                if [ "${installed_packages[system]}" == "1" ]; then
-                    echo "Displaying system ASCII art..."
-                    echo "Device: $(hostname)"
-                    echo "OS: $(uname -o)"
-                else
-                    echo "System package not installed."
-                fi
-                ;;
-            "info")
-                if [ "${installed_packages[info]}" == "1" ]; then
-                    echo "Made by Tozter_1 with love :>"
-                else
-                    echo "Info package not installed."
-                fi
-                ;;
-            "exit")
-                echo "Exiting installer."
-                break
-                ;;
-            *)
-                if [ "${installed_packages[$input]}" == "1" ]; then
-                    echo "$input package is installed but has no extra actions yet."
-                else
-                    echo "Unknown command or package not installed."
-                fi
-                ;;
-        esac
+        if [ "$input" == "system" ]; then
+            if [ "$myint1" == 1 ]; then
+                neofetch || echo "neofetch not available"
+            else
+                echo "⚠️  System tools not installed."
+            fi
+
+        elif [ "$input" == "info" ]; then
+            if [ "$myint2" == 1 ]; then
+                echo -e "💡 Tozter OS made with ❤️ by Tozter_1"
+            else
+                echo "⚠️  Info package not installed."
+            fi
+
+        elif [ "$input" == "exit" ]; then
+            echo "👋 Exiting Tozter OS Shell. See you soon!"
+            break
+
+        else
+            echo "❓ Unknown command."
+        fi
     done
 }
 
-install_menu
 main
