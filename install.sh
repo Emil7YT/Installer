@@ -86,7 +86,7 @@ EOF
             break
 
         else
-            echo "Unknown command. Type 'system', 'info', or 'exit'."
+            echo "Unknown command."
         fi
     done
 }
