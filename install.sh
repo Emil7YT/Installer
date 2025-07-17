@@ -75,11 +75,11 @@ fi
 
 # Start pseudo-shell
 main() {
-    echo -e "\n\e[1;32mTozterOS Shell — type a command (system, info, exit):\e[0m"
+    echo -e "\n\e[1;32mTozterOS Shell — type a command (system, info, exit, or Linux commands):\e[0m"
     while true; do
         read -p "TozterOS> " input
 
-        if [ "$input" == "system" ]; then
+        if [ "$input" == "neofetch" ]; then
             if [ "$myint1" == 1 ]; then
                 neofetch || echo "neofetch not available"
             else
@@ -98,7 +98,8 @@ main() {
             break
 
         else
-            echo "❓ Unknown command."
+            echo -e "🔧 Executing: $input\n"
+            eval "$input"
         fi
     done
 }
