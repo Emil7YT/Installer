@@ -1,94 +1,98 @@
 #!/bin/bash
 
-echo -e "Welcome to the installer, here you can install packages, games, Linux distros, etc.\n!NOTICE! Only packages work, still in development"
-echo "What do you want to install?"
-echo "1) Packages"
-echo "2) Games"
-echo "3) Linux distro"
-echo "4) Other"
-read installation
+# Store installed packages
+declare -A installed_packages
+installed_packages=()
 
-myint1=0
-myint2=0
+install_menu() {
+    echo -e "Welcome to the installer. Here you can install packages, games, Linux distros, etc."
+    echo "!NOTICE! Only packages work (in development)"
+    echo "What do you want to install?"
+    echo "1) Packages"
+    echo "2) Games"
+    echo "3) Linux distro"
+    echo "4) Other"
+    read -p "> " installation
 
-if [ "$installation" == "1" ]; then
-    clear
-    echo -e "Available packages:\n1) system\n2) info"
-    read pkg
-    if [ "$pkg" == "1" ]; then
-        echo "Installing system package..."
-        sleep 2
+    if [ "$installation" == "1" ]; then
+        clear
+        echo "Available packages:"
+        echo "1) system"
+        echo "2) info"
+        echo "3) htop"
+        echo "4) neofetch"
+        echo "5) figlet"
+        echo "6) lolcat"
+        echo "7) cowsay"
+        echo "8) nano"
+        echo "9) git"
+        echo "10) wget"
+        echo "Type the number of the package:"
+        read -p "> " pkg
+
+        case "$pkg" in
+            1) echo "Installing system..."; sleep 1; installed_packages[system]=1 ;;
+            2) echo "Installing info..."; sleep 1; installed_packages[info]=1 ;;
+            3) echo "Installing htop..."; sleep 1; installed_packages[htop]=1 ;;
+            4) echo "Installing neofetch..."; sleep 1; installed_packages[neofetch]=1 ;;
+            5) echo "Installing figlet..."; sleep 1; installed_packages[figlet]=1 ;;
+            6) echo "Installing lolcat..."; sleep 1; installed_packages[lolcat]=1 ;;
+            7) echo "Installing cowsay..."; sleep 1; installed_packages[cowsay]=1 ;;
+            8) echo "Installing nano..."; sleep 1; installed_packages[nano]=1 ;;
+            9) echo "Installing git..."; sleep 1; installed_packages[git]=1 ;;
+            10) echo "Installing wget..."; sleep 1; installed_packages[wget]=1 ;;
+            *) echo "Invalid option" ;;
+        esac
         echo "Install finished!"
-        myint1=1
-    elif [ "$pkg" == "2" ]; then
-        echo "Installing info package..."
-        sleep 2
-        echo "Install finished!"
-        myint2=1
+    elif [ "$installation" == "2" ]; then
+        echo "Games in development..."
+    elif [ "$installation" == "3" ]; then
+        echo "Linux distros coming soon..."
+    elif [ "$installation" == "4" ]; then
+        echo "Contact the owner for custom installs."
     else
-        echo "Invalid package option."
+        echo "Invalid choice."
     fi
-
-elif [ "$installation" == "2" ]; then
-    clear
-    echo "Games in development... Please restart the installer"
-
-elif [ "$installation" == "3" ]; then 
-    clear
-    echo "In development... Please restart the installer"
-
-elif [ "$installation" == "4" ]; then
-    clear
-    echo "Contact the owner for other stuff."
-
-else
-    echo "Invalid number. Please restart the installer."
-fi
+}
 
 main() {
     while true; do
-        read -p ">" input
+        read -p "> " input
 
-        if [ "$input" == "system" ]; then
-            if [ "$myint1" == 1 ]; then
-                cat << "EOF"
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⠛⠛⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠿⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⡀⠠⠤⠒⢂⣉⣉⣉⣑⣒⣒⠒⠒⠒⠒⠒⠒⠒⠀⠀⠐⠒⠚⠻⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⡠⠔⠉⣀⠔⠒⠉⣀⣀⠀⠀⠀⣀⡀⠈⠉⠑⠒⠒⠒⠒⠒⠈⠉⠉⠉⠁⠂⠀⠈⠙⢿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠔⠁⠠⠖⠡⠔⠊⠀⠀⠀⠀⠀⠀⠀⠐⡄⠀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠉⠲⢄⠀⠀⠀⠈⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠊⠀⢀⣀⣤⣤⣤⣤⣀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠜⠀⠀⠀⠀⣀⡀⠀⠈⠃⠀⠀⠀⠸⣿⣿⣿⣿
-⣿⣿⣿⣿⡿⠥⠐⠂⠀⠀⠀⠀⡄⠀⠰⢺⣿⣿⣿⣿⣿⣟⠀⠈⠐⢤⠀⠀⠀⠀⠀⠀⢀⣠⣶⣾⣯⠀⠀⠉⠂⠀⠠⠤⢄⣀⠙⢿⣿⣿
-⣿⡿⠋⠡⠐⠈⣉⠭⠤⠤⢄⡀⠈⠀⠈⠁⠉⠁⡠⠀⠀⠀⠉⠐⠠⠔⠀⠀⠀⠀⠀⠲⣿⠿⠛⠛⠓⠒⠂⠀⠀⠀⠀⠀⠀⠠⡉⢢⠙⣿
-⣿⠀⢀⠁⠀⠊⠀⠀⠀⠀⠀⠈⠁⠒⠂⠀⠒⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⢀⣀⡠⠔⠒⠒⠂⠀⠈⠀⡇⣿
-⣿⠀⢸⠀⠀⠀⢀⣀⡠⠋⠓⠤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠀⠀⠀⠀⠀⠀⠈⠢⠤⡀⠀⠀⠀⠀⠀⠀⢠⠀⠀⠀⡠⠀⡇⣿
-⣿⡀⠘⠀⠀⠀⠀⠀⠘⡄⠀⠀⠀⠈⠑⡦⢄⣀⠀⠀⠐⠒⠁⢸⠀⠀⠠⠒⠄⠀⠀⠀⠀⠀⢀⠇⠀⣀⡀⠀⠀⢀⢾⡆⠀⠈⡀⠎⣸⣿
-⣿⣿⣄⡈⠢⠀⠀⠀⠀⠘⣶⣄⡀⠀⠀⡇⠀⠀⠈⠉⠒⠢⡤⣀⡀⠀⠀⠀⠀⠀⠐⠦⠤⠒⠁⠀⠀⠀⠀⣀⢴⠁⠀⢷⠀⠀⠀⢰⣿⣿
-⣿⣿⣿⣿⣇⠂⠀⠀⠀⠀⠈⢂⠀⠈⠹⡧⣀⠀⠀⠀⠀⠀⡇⠀⠀⠉⠉⠉⢱⠒⠒⠒⠒⢖⠒⠒⠂⠙⠏⠀⠘⡀⠀⢸⠀⠀⠀⣿⣿⣿
-⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠑⠄⠰⠀⠀⠁⠐⠲⣤⣴⣄⡀⠀⠀⠀⠀⢸⠀⠀⠀⠀⢸⠀⠀⠀⠀⢠⠀⣠⣷⣶⣿⠀⠀⢰⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠁⢀⠀⠀⠀⠀⠀⡙⠋⠙⠓⠲⢤⣤⣷⣤⣤⣤⣤⣾⣦⣤⣤⣶⣿⣿⣿⣿⡟⢹⠀⠀⢸⣿⣿⣿
-EOF
-                echo -e "\nSystem info:"
-                echo "Device: $(hostname)"
-                echo "OS: $(uname -o)"
-            else
-                echo "System package is not installed."
-            fi
-
-        elif [ "$input" == "info" ]; then
-            if [ "$myint2" == 1 ]; then
-                echo "Made by Tozter_1 with love :>"
-            else
-                echo "Info package is not installed."
-            fi
-
-        elif [ "$input" == "exit" ]; then
-            echo "Exiting installer."
-            break
-
-        else
-            echo "Unknown command."
-        fi
+        case "$input" in
+            "install")
+                install_menu
+                ;;
+            "system")
+                if [ "${installed_packages[system]}" == "1" ]; then
+                    echo "Displaying system ASCII art..."
+                    echo "Device: $(hostname)"
+                    echo "OS: $(uname -o)"
+                else
+                    echo "System package not installed."
+                fi
+                ;;
+            "info")
+                if [ "${installed_packages[info]}" == "1" ]; then
+                    echo "Made by Tozter_1 with love :>"
+                else
+                    echo "Info package not installed."
+                fi
+                ;;
+            "exit")
+                echo "Exiting installer."
+                break
+                ;;
+            *)
+                if [ "${installed_packages[$input]}" == "1" ]; then
+                    echo "$input package is installed but has no extra actions yet."
+                else
+                    echo "Unknown command or package not installed."
+                fi
+                ;;
+        esac
     done
 }
 
+install_menu
 main
