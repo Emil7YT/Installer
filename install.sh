@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Welcome to the installer, here you can install packages, games, Linux distros, etc.\n!NOTICE! Only packages work, still in development"
+echo -e "Welcome to the installer, here you can install packages, games, Linux distros, etc.\n!NOTICE! Only packages work, still in development"
 echo "What do you want to install?"
 echo "1) Packages"
 echo "2) Games"
@@ -32,12 +32,10 @@ if [ "$installation" == "1" ]; then
 elif [ "$installation" == "2" ]; then
     clear
     echo "Games in development... Please restart the installer"
-    
 
 elif [ "$installation" == "3" ]; then 
     clear
     echo "In development... Please restart the installer"
-    
 
 elif [ "$installation" == "4" ]; then
     clear
@@ -47,12 +45,14 @@ else
     echo "Invalid number. Please restart the installer."
 fi
 
+# Define the main function that loops to accept input
 main() {
-read ">" input
-if [ "$input" == "system"]; then
-    if [ "$myint1" == 1]; then
-        cat << "EOF"
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⠛⠛⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠿⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    while true; do
+        read -p ">" input
+        if [ "$input" == "system" ]; then
+            if [ "$myint1" == 1 ]; then
+                cat << "EOF"
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⠛⠛⠋⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠿⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⡀⠠⠤⠒⢂⣉⣉⣉⣑⣒⣒⠒⠒⠒⠒⠒⠒⠒⠀⠀⠐⠒⠚⠻⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⡠⠔⠉⣀⠔⠒⠉⣀⣀⠀⠀⠀⣀⡀⠈⠉⠑⠒⠒⠒⠒⠒⠈⠉⠉⠉⠁⠂⠀⠈⠙⢿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠔⠁⠠⠖⠡⠔⠊⠀⠀⠀⠀⠀⠀⠀⠐⡄⠀⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠉⠲⢄⠀⠀⠀⠈⣿⣿⣿⣿⣿
@@ -74,15 +74,27 @@ if [ "$input" == "system"]; then
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣶⣤⣤⣤⣤⣀⣀⣤⣤⣤⣶⣾⣿⣿⣿⣿⣿
 EOF
-        echo "System info:\n\nDevice: $(hostname)\nOS: $(hostname)"
-        main
-elif [ "$input" == "info"]; then
-    if [ "$myint2" == 1]; then
-        echo "Made by Tozter_1 with love :>"
-        main
-    else
-        echo "Error"
-        main
-    fi
-fi
+                echo -e "System info:\n\nDevice: $(hostname)\nOS: $(uname -o)"
+            else
+                echo "System package not installed yet."
+            fi
+
+        elif [ "$input" == "info" ]; then
+            if [ "$myint2" == 1 ]; then
+                echo "Made by Tozter_1 with love :>"
+            else
+                echo "Info package not installed."
+            fi
+
+        elif [ "$input" == "exit" ]; then
+            echo "Exiting installer."
+            break
+
+        else
+            echo "Unknown command: $input"
+        fi
+    done
 }
+
+# Call main after initial selection/installations
+main
